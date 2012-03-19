@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ -z "$1" ]; then
+    echo "Usage: ./upload.sh REPO_CODENAME">&2
+    exit 1
+fi
 
 if [ $(whoami) != "root" ]; then
     echo "only root can add files to the repo"
@@ -39,7 +43,7 @@ fi
 for i in $INCOMING/*.changes; do
 
   # Import package to 'sarge' distribution.
-  reprepro -Vb . include sid $i
+  reprepro -Vb . include $1 $i
 
   # Delete the referenced files
   sed '1,/Files:/d' $i | sed '/BEGIN PGP SIGNATURE/,$d' \
